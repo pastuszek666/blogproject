@@ -1,0 +1,31 @@
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                <li class="user-pro"> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <img src="backend/images/users/1.jpg" alt="user-img" class="img-circle"><span class="hide-menu">Mark Jeckson</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="javascript:void(0)"><i class="ti-user"></i> {% trans %}My Profile{% endtrans %}</a></li>
+                        <li><a href="javascript:void(0)"><i class="ti-wallet"></i> {% trans %}My Payments{% endtrans %}</a></li>
+                        <li><a href="javascript:void(0)"><i class="ti-settings"></i> {% trans %}Account Setting{% endtrans %}</a></li>
+                        <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> {% trans %}Logout{% endtrans %}</a></li>
+                    </ul>
+                </li>
+                <li> 
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i class="ti-book"></i><span class="hide-menu">{% trans %}Blog{% endtrans %}</span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ path('panel_posts') }}"><i class="ti-layout-media-overlay-alt-2"></i> {% trans %}Articles{% endtrans %}</a></li>
+                        <li><a href="javascript:void(0)"><i class="ti-tag"></i> {% trans %}Tagi{% endtrans %}</a></li>
+                        <li><a href="{{ path('panel_categories') }}"><i class="ti-archive"></i> {% trans %}Kategorie{% endtrans %}</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
