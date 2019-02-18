@@ -1,0 +1,77 @@
+{% extends 'backend/base.html.twig' %}
+
+{% block page_title %}
+    {{ 'category'|trans|title }}{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/style.min.css') }}">
+    {#{{ parent() }}#}
+{% endblock %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h4 class="text-themecolor">{{ 'category'|trans|title }}</h4>
+    </div>
+    <div class="col-md-7 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{% trans %}Home{% endtrans %}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('panel_posts') }}">{{ 'blog'|trans|title }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('panel_categories') }}">{{ 'categories'|trans|title }}</a></li>
+                <li class="breadcrumb-item active">{{ 'category'|trans|title }}</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                    <div class="form-body">
+                            {#{{ form_row(form.name) }}#}
+                            {#{{ form_row(form.slug) }}#}
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <button type="submit" class="btn btn-block btn-danger"><i class="ti-trash"></i> {% trans %}delete{% endtrans %}</button>
+                    </div>
+                    <div class="col-lg-4 col-md-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+<!-- Delete Modal -->
+{% if category.id is not null %}
+{{ include('backend/delete_modal_info.html.twig', { 'link': path('panel_category_delete', {'id': category.id, 'token': csrf_token('delete-item')}) }) }}
+{% endif %}
+<!-- /.modal -->
+
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('backend/js/custom.min.js') }}"></script>
+{% endblock %}

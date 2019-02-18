@@ -1,0 +1,76 @@
+{% extends 'backend/base.html.twig' %}
+
+{% block page_title %}
+    {% trans %}Categories{% endtrans %}{{ parent() }}
+{% endblock %}
+
+{% block stylesheet %}
+        {{ parent() }}
+ 
+{% endblock %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h4 class="text-themecolor">{% trans %}Categories{% endtrans %}</h4>
+    </div>
+    <div class="col-md-7 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{% trans %}Home{% endtrans %}</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{% trans %}Articles{% endtrans %}</a></li>
+                <li class="breadcrumb-item active">{% trans %}Categories{% endtrans %}</li>
+            </ol>
+                <a href="{{ path('panel_category') }}"><button type="button" class="btn waves-effect waves-light btn-rounded btn-info d-none d-lg-block m-l-15"><i class="ti-plus"></i> {% trans %}Create{% endtrans %}</button></a>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="row"> 
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if categories is not empty %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{{ knp_pagination_sortable(categories, 'Title'|trans, 't.name') }}<span class="text-muted">{% if categories.isSorted('t.name') %}<i class="ti-exchange-vertical"></i>{% endif %}</span></th>
+                                <th>{{ knp_pagination_sortable(categories, 'Slug'|trans, 't.slug') }}<span class="text-muted">{% if categories.isSorted('t.slug') %}<i class="ti-exchange-vertical"></i>{% endif %}</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                            <tr>
+                                <td>
+                                    <a class="news-title" href="{{ path('panel_category', {'slug': category.slug}) }}">{{ category.name }}</a>
+                                </td>
+                                <td>{{ category.slug }}</td>
+                            </tr>
+                           {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <span class="no-result col-md-12 col-sm-12 col-xs-12">{{ 'Categories not Found'|trans }}</span>
+                    {% endif %}    
+                </div>
+                {{ knp_pagination_render(categories, 'backend/pagination/pagination.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+     <script src="{{ asset('backend/js/custom.min.js') }}"></script>
+{% endblock %}
