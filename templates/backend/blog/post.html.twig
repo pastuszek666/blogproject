@@ -1,0 +1,183 @@
+{% extends 'backend/base.html.twig' %}
+
+{% block page_title %}
+    {{ 'articles'|trans|title }}{{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/node_modules/bootstrap-select/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/node_modules/summernote/dist/summernote-bs4.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/node_modules/dropify/dist/css/dropify.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/style.min.css') }}">
+    {#{{ parent() }}#}
+{% endblock %}
+{% block content %}
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+        <h4 class="text-themecolor">{{ 'post'|trans|title }}</h4>
+    </div>
+    <div class="col-md-7 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{% trans %}Home{% endtrans %}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('panel_posts') }}">{{ 'articles'|trans|title }}</a></li>
+                <li class="breadcrumb-item active">{{ 'post'|trans|title }}</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                    <div class="form-body">
+                            {{ form_row(form.title, {
+                                'attr': {
+                                    'class': 'a-counter',
+                                    'data-validation-required-message': 'This field is required'
+                                }
+                            }) }}
+                            {{ form_row(form.slug) }}
+                            <small><a href="{{ path('blog') }}" target="_blank">https://szkolarekin.pl{{ path('blog') }}/ </a></small>
+                            {{ form_row(form.introductionContent, {'attr': {'class': 'a-counter'}}) }}
+                            {{ form_row(form.content, {'attr': {'class': 'summernote'}}) }}
+                        <h3 class="box-title m-t-40">SEO</h3>
+                        <hr>
+                        {{ form_row(form.metaTitle, {'attr': {'class': 'a-counter'}}) }}
+                        <hr>
+                        {{ form_row(form.metaDescription, {'attr': {'class': 'a-counter'}}) }}
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <button type="submit" class="btn btn-block btn-success"><i class="ti-save"></i> {% trans %}Save{% endtrans %}</button>
+                    </div>
+                    <div class="col-lg-4 col-md-2">
+                        <button type="button" class="btn btn-block btn-outline-danger" data-toggle="modal" data-target="#exampleModal"><i class="ti-trash"></i> {% trans %}Delete{% endtrans %}</button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <p>
+                <strong><i class="ti-panel"></i> {% trans %}Status{% endtrans %}</strong>
+                {% if post.status is not null and post.status.slug == 'public' and post.publishedDate <= date() %}
+                    <span class="badge badge-pill badge-success">{% trans %}Published{% endtrans %}</span>
+                {% elseif post.status is not null and post.status.slug == 'public' and post.publishedDate > date() %}
+                    <span class="badge badge-pill badge-warning">{% trans %}Expectant{% endtrans %}</span>
+                {% endif %}
+                </p>
+                {{ form_widget(form.status, {'attr': {'class': 'selectpicker fullwidth-select'}}) }}<br><br>
+                <p><strong>{% trans %}Created date{% endtrans %}:</strong> {{ post.createDate|date('d-m-Y H:i:s') }}</p>
+                <p><strong>{% trans %}Update date{% endtrans %}:</strong> {{ post.updateDate|date('d-m-Y H:i:s') }}</p>
+                <p><i class="ti-calendar"></i> <strong>{% trans %}Publication date{% endtrans %}</strong></p>
+                {{ form_widget(form.publishedDate, {'attr': {'class': 'form-control', 'id': 'date-format'}}) }}<br><br><br>
+
+                <p><i class="ti-agenda"></i> <strong>{% trans %}Category{% endtrans %}</strong></p>
+                {{ form_widget(form.category, {'attr': {'class': 'selectpicker fullwidth-select'}}) }}<br><br><br>
+               <p><i class="ti-tag"></i> <strong>{% trans %}Tags{% endtrans %}</strong></p>
+               {{ form_widget(form.tags, {'attr': {'class': 'selectpicker fullwidth-select'}}) }}<br><br><br>
+                <p><i class="ti-user"></i> <strong>{% trans %}Author{% endtrans %}</strong></p><br>
+                {% if post.author is not null %}{{ post.author.name }} {{ post.author.surname }}{% endif %}
+               <p><i class="ti-image"></i> <strong>{% trans %}Thumbnail{% endtrans %}</strong></p>
+               {#{{ form_widget(form.thumbnail, { 'attr': {'data-default-file': asset('uploads/thumbnails/' ~ post.thumbnail)} }) }}#}
+               {{ form_widget(form.thumbnail, {'attr': {'class': 'dropify'}}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+<!-- Delete Modal -->
+{% if post.id %}
+{{ include('backend/delete_modal_info.html.twig', { 'link': path('panel_post_delete', {'id': post.id, 'token': csrf_token('delete-item')}) }) }}
+{% endif %}
+    <!-- /.modal -->
+
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('backend/node_modules/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('backend/js/custom.min.js') }}"></script>
+    <script src="{{ asset('backend/node_modules/summernote/dist/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('backend/node_modules/summernote/dist/lang/summernote-pl-PL.min.js') }}"></script>
+    <script src="{{ asset('backend/node_modules/moment/moment.js') }}"></script>
+    <script src="{{ asset('backend/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') }}"></script>
+    <script src="{{ asset('backend/node_modules/dropify/dist/js/dropify.min.js') }}"></script>
+    <script src="{{ asset('backend/js/pages/validation.js') }}"></script>
+    <script>
+    $(function() {
+        $('.summernote').summernote({
+            height: 600, // set editor height
+            minHeight: null, // set minimum height of editor
+            maxHeight: null, // set maximum height of editor
+            focus: false, // set focus to editable area after initializing summernote
+            lang: 'pl-PL'
+        });
+        $('#date-format').bootstrapMaterialDatePicker({ format: 'd-m-Y H:i', lang: 'pl' });
+        $('.dropify').dropify();
+    });
+
+    (function () {
+        "use strict";
+        // Works only when there are elements that should have counter
+        if (document.querySelector('.a-counter')) {
+            const inputs = document.getElementsByClassName('a-counter');
+            let charMax, counterElement, counter, el, i;
+
+            // Function that highlights actual characters count
+            function showCount() {
+                el = inputs[i] || this;     // Get input ("this" when it works under event listener, inputs[i] when it works on start)
+                counter = el.nextElementSibling.children[0];
+                counter.textContent = el.value.length;
+            }
+
+            for (i = inputs.length; i--;) {
+                // Handle lack of "maxlength" attribute or lack of value
+                if (inputs[i].getAttribute('maxlength') === null) {
+                    console.warn(`This input/textarea doesn't have required "maxlength" attribute: ${inputs[i].outerHTML}`);
+                    return;
+                } else if (inputs[i].getAttribute('maxlength') === '') {
+                    console.warn(`Please set "maxlength" attribute value to this input/textarea: ${inputs[i].outerHTML}`);
+                    return;
+                }
+
+                // Preparation of the counter element
+                charMax = inputs[i].getAttribute('maxlength');
+                counterElement = `<span class="a-counter-box">(<span class="a-counter-element"></span>/${charMax} znaków)</span>`;
+                inputs[i].parentNode.innerHTML += counterElement;
+
+                // Invoke function after page is loaded (to show initial value)
+                showCount();
+
+                // Adding event listeners for keyup, paste and change events in counted input
+                inputs[i].addEventListener('keyup', showCount, false);
+                inputs[i].addEventListener('paste', showCount, false);
+                inputs[i].addEventListener('change', showCount, false);
+            }
+        } else {
+            console.warn('There are no elements that have "a-counter" class');
+            return;
+        }
+    })();
+
+    </script>
+{% endblock %}
