@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Adevo CMS Systems - Strona błędu">
+        <meta name="author" content="Adevo CMS Systems - Tomasz Kowalczyk (poczta@tomekkowalczyk.pl)">
+        <link href="{{ asset('images/favicon.png') }}" rel="shortcut icon">
+        <title>{% spaceless %}{% block pageTitle %}Błąd Osteomedic - system rezerwacji{% endblock %}{% endspaceless %}</title>
+
+
+        {% block stylesheets %}
+            <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+            {% stylesheets 
+                    'bundles/adevoadmin/bootstrap/dist/css/bootstrap.min.css'
+                    'bundles/adevoadmin/bower_components/bootstrap-extension/css/bootstrap-extension.css'
+                    'bundles/adevoadmin/css/animate.css'
+                    'bundles/adevoadmin/css/style.css'
+                    'bundles/adevoadmin/css/colors/default.css'
+                    
+            %}
+            <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
+            {% endstylesheets %}
+        {% endblock %}
+
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    </head>
+    <body>
+        <section id="wrapper" class="error-page">
+            <div class="error-box">
+                <div class="error-body text-center">
+                    {% block content %}
+                    {% endblock %}
+                    <a href="{{ path("pages_index") }}" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Powróć na stronę główną</a> </div>
+                <footer class="footer text-center">© Adevo Systems.</footer>
+            </div>
+        </section>
+
+        {% block javascripts %}
+            {% javascripts
+                    '@AdevoAdminBundle/Resources/public/bower_components/jquery/dist/jquery.min.js'
+                    '@AdevoAdminBundle/Resources/public/bootstrap/dist/js/tether.min.js'
+                    '@AdevoAdminBundle/Resources/public/bootstrap/dist/js/bootstrap.min.js'
+                    '@AdevoAdminBundle/Resources/public/bower_components/bootstrap-extension/js/bootstrap-extension.min.js'
+                    '@AdevoAdminBundle/Resources/public/js/custom.min.js'
+                    
+            %}
+            <script src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+
+    </body>
+
+</html>
